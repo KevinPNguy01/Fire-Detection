@@ -11,6 +11,5 @@ void setup() {
 }
 
 void loop() {
-  printSensorReadings();
   delay(500);
 }
