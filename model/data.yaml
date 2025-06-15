@@ -1,0 +1,8 @@
+names:
+- fire
+- smoke
+- default
+nc: 3
+test: combined_dataset/test/images
+train: combined_dataset/train/images
+val: combined_dataset/val/images
