@@ -1,6 +1,7 @@
 #include <Wire.h>
 #include <Adafruit_LTR390.h>
 #include <Adafruit_BME280.h>
+#include <Adafruit_TSL2591.h>
 
 #define SDA_PIN 5  // GPIO 5 for SDA
 #define SCL_PIN 6  // GPIO 6 for SCL
@@ -10,6 +11,10 @@
 
 Adafruit_BME280 bme;
 Adafruit_LTR390 ltr;
+Adafruit_TSL2591 tsl;
+
+extern float infrared;
+extern uint32_t uv;
 
 void setupSensors() {
   Wire.begin(SDA_PIN, SCL_PIN);
@@ -24,22 +29,35 @@ void setupSensors() {
     while (1);
   }
 
+  if (!tsl.begin()) {
+    Serial.println("TSL2561 not found!");
+    while (1);
+  }
+
+  ltr.setMode(LTR390_MODE_UVS);
+  ltr.setGain(LTR390_GAIN_9);
+  ltr.setResolution(LTR390_RESOLUTION_18BIT);
+
   Serial.println("Both sensors initialized successfully.");
 }
 
+void getSensorReadings() {
+  uint32_t lum = tsl.getFullLuminosity();
+  uint16_t ir, full;
+  infrared = lum >> 16;
+  uv = ltr.readUVS();
+}
+
 void printSensorReadings() {
-  float temperature = bme.readTemperature();
+  float infrared = tsl.getFullLuminosity();
   float pressure = bme.readPressure() / 100.0F; // in hPa
   float humidity = bme.readHumidity();
 
-  ltr.setMode(LTR390_MODE_UVS);
   uint32_t uvs = ltr.readUVS();        // Raw UV reading
 
-  uint32_t als = ltr.readALS();        // Raw ambient light reading
-
   Serial.println("BME280 Readings:");
-  Serial.print("Temperature: ");
-  Serial.print(temperature);
+  Serial.print("Infrared: ");
+  Serial.print(infrared);
   Serial.println(" °C");
 
   Serial.print("Pressure: ");
@@ -51,9 +69,6 @@ void printSensorReadings() {
   Serial.println(" %");
 
   Serial.println("LTR390 Readings:");
-  Serial.print("Ambient Light (ALS): ");
-  Serial.println(als);
-
   Serial.print("UVS Raw: ");
   Serial.println(uvs);
 

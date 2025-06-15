@@ -38,6 +38,9 @@
 int led_duty = 0;
 bool isStreaming = false;
 
+extern float fire;
+extern float smoke;
+
 #endif
 
 typedef struct {
@@ -682,9 +685,8 @@ static esp_err_t post_status_handler(httpd_req_t *req) {
   DeserializationError err = deserializeJson(doc, buf);
   if (err) return httpd_resp_send_500(req);
 
-  float fire = doc["fire"] | -1.0;
-  float smoke = doc["smoke"] | -1.0;
-  Serial.printf("Fire: %.2f | Smoke: %.2f\n", fire, smoke);
+  fire = doc["fire"] | -1.0;
+  smoke = doc["smoke"] | -1.0;
   return httpd_resp_sendstr(req, "OK");
 }
 
