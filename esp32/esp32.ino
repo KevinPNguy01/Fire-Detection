@@ -1,3 +1,7 @@
+#include <WiFi.h>
+#include <ESPmDNS.h>
+#include "config.h"
+
 void setupCameraWebServer();
 void setupSensors();
 void getSensorReadings();
@@ -5,9 +9,6 @@ void getSensorReadings();
 // Confidence level between 0-1 of whether there is fire/smoke
 float fire;
 float smoke;
-
-// Threshold for when fire is considered detected
-const float FIRE_THRESHOLD = 0.35;
 
 // Whether infrared is detected
 bool infrared;
@@ -26,7 +27,9 @@ void setup() {
 void loop() {
   getSensorReadings();
 
-  Serial.println("\nSensors:");
+  Serial.println("\nIP Address:");
+  Serial.println(WiFi.localIP());
+  Serial.println("Sensors:");
   Serial.print("Fire: ");
   Serial.println(fire);
   Serial.print("Smoke: ");
