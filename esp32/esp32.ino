@@ -1,22 +1,18 @@
-const float FIRE_THRESHOLD = 0.5;
-const float SMOKE_THRESHOLD = 0.5;
-const float INFRARED_THRESHOLD = 50;
-const uint32_t UV_THRESHOLD = 50;
-
 void setupCameraWebServer();
 void setupSensors();
-void scanI2C();
-void printSensorReadings();
 void getSensorReadings();
 
+// Confidence level between 0-1 of whether there is fire/smoke
 float fire;
 float smoke;
-float infrared;
-uint32_t uv;
 
-/**
- * Future logic for what to do when fire is detected
- */
+// Threshold for when fire is considered detected
+const float FIRE_THRESHOLD = 0.35;
+
+// Whether infrared is detected
+bool infrared;
+
+// Future logic to handle fire detection
 void fireDetected() {
   Serial.println("FIRE DETECTED!!!");
 }
@@ -24,7 +20,6 @@ void fireDetected() {
 void setup() {
   Serial.begin(115200);
   setupCameraWebServer();
-  scanI2C();
   setupSensors();
 }
 
@@ -38,11 +33,11 @@ void loop() {
   Serial.println(smoke);
   Serial.print("Infrared: ");
   Serial.println(infrared);
-  Serial.print("UV: ");
-  Serial.println(uv);
 
-  if (fire > FIRE_THRESHOLD && smoke > SMOKE_THRESHOLD && infrared > INFRARED_THRESHOLD && uv > UV_THRESHOLD) {
+  // Check if fire is detected based on the threshold and infrared sensor
+  if (fire > FIRE_THRESHOLD && infrared) {
     fireDetected();
   }
+
   delay(500);
 }
