@@ -1,16 +1,11 @@
 #define CAMERA_MODEL_XIAO_ESP32S3 
 #define sensor_t camera_sensor_t
 
-#include "esp_camera.h"
-#include "camera_pins.h"
 #include <WiFi.h>
 #include <ESPmDNS.h>
-
-// ===========================
-// Enter your WiFi credentials
-// ===========================
-const char *ssid = "REDACTED_SSID";
-const char *password = "REDACTED_PASSWORD";
+#include "esp_camera.h"
+#include "camera_pins.h"
+#include "config.h"
 
 void startCameraServer();
 
