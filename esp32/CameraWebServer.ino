@@ -4,6 +4,7 @@
 #include "esp_camera.h"
 #include "camera_pins.h"
 #include <WiFi.h>
+#include <ESPmDNS.h>
 
 // ===========================
 // Enter your WiFi credentials
@@ -117,6 +118,13 @@ void setupCameraWebServer() {
   Serial.println("WiFi connected");
 
   startCameraServer();
+
+  if (!MDNS.begin("esp32")) {
+    Serial.println("Error setting up MDNS responder!");
+  } else {
+    MDNS.addService("http", "tcp", 80);
+    Serial.println("mDNS responder started");
+  }
 
   Serial.print("Camera Ready! Use 'http://");
   Serial.print(WiFi.localIP());
