@@ -1,4 +1,5 @@
 from zeroconf import Zeroconf, ServiceBrowser
+from typing import Union
 import time
 
 class Listener:
@@ -17,7 +18,7 @@ class Listener:
         pass
 
 
-def find_esp32() -> str | None:  
+def find_esp32() -> Union[str, None]:  
     """
     Discover the ESP32 device on the local network using Zeroconf.
 

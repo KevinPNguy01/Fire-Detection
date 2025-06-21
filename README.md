@@ -56,7 +56,7 @@ This folder contains the code for running fire detection on a Jetson Nano using 
 - `requirements.txt` — Python dependencies for this module
 
 ### Requirements
-- Python 3.10+
+- Python 3.8+
 - Jetson Nano
 - ESP32 camera module streaming video on the same network
 
